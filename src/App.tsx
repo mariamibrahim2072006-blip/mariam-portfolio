@@ -1,822 +1,957 @@
+import { useState } from "react";
 import {
   ArrowDown,
-  ArrowUpRight,
-  Award,
-  Bot,
-  Briefcase,
+  ArrowRight,
+  Brain,
+  BriefcaseBusiness,
+  CalendarDays,
+  CheckCircle2,
   Code2,
-  Database,
-  Download,
   ExternalLink,
-  FileText,
-  Globe,
   GraduationCap,
+  Layers3,
   Mail,
   Menu,
-  Monitor,
-  Rocket,
+  Play,
+  Server,
+  ShieldCheck,
   Sparkles,
-  Terminal,
   X,
-  Zap,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import { useState } from "react";
 
 interface Project {
   title: string;
+  subtitle: string;
   category: string;
   description: string;
   technologies: string[];
-  github: string;
-  live: string;
-  type: "icon" | "image";
-  icon?: LucideIcon;
-  imageSrc?: string;
+  github?: string;
+  demoUrl?: string;
+  image: string;
+  featured?: boolean;
+  icon: typeof Code2;
 }
+
+const projects: Project[] = [
+  {
+    title: "HR Management System",
+    subtitle: "Full-Stack HRMS",
+    category: "Full-Stack Development",
+    description:
+      "A complete human resources management system with employee management, attendance, leaves, payroll, authentication, role-based permissions, and a real database.",
+    technologies: [
+      "React",
+      "Express.js",
+      "MySQL",
+      "JWT",
+      "REST API",
+      "JavaScript",
+    ],
+    github:
+      "https://github.com/mariamibrahim2072006-blip/hr-system",
+    demoUrl:
+      "https://drive.google.com/file/d/1h8qyeDtTty4zwnJpTHZ1jKzKBRWZUk-b/preview",
+    image: "/projects/hrms.png",
+    featured: true,
+    icon: BriefcaseBusiness,
+  },
+
+  {
+    title: "ELARA",
+    subtitle: "Luxury Candle E-Commerce",
+    category: "E-Commerce",
+    description:
+      "A modern candle e-commerce platform with product browsing, cart management, checkout flow, database integration, and Stripe payment integration.",
+    technologies: [
+      "React",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "Stripe",
+      "Vite",
+    ],
+    github:
+      "https://github.com/mariamibrahim2072006-blip/elara-essence",
+    demoUrl:
+      "https://drive.google.com/file/d/1ndKufLgXnPOzQnRP2-ij6rZo8yruXyBF/preview",
+    image: "/projects/elara.png",
+    featured: true,
+    icon: Sparkles,
+  },
+
+  {
+    title: "Aromiq",
+    subtitle: "Perfume E-Commerce",
+    category: "Web Development",
+    description:
+      "A perfume e-commerce website focused on a polished shopping experience, product presentation, responsive design, and backend integration.",
+    technologies: [
+      "React",
+      "JavaScript",
+      "CSS",
+      "Node.js",
+      "Express.js",
+      "Database",
+    ],
+    github:
+      "https://github.com/mariamibrahim2072006-blip/aromiq-store",
+    demoUrl:
+      "https://drive.google.com/file/d/1pEuN5CbSrByRl90rmbZ-iwdQaWin3B1o/preview",
+    image: "/projects/Aromiq.png",
+    featured: true,
+    icon: Layers3,
+  },
+
+  {
+    title: "Baianat Store",
+    subtitle: "Modern E-Commerce Platform",
+    category: "Frontend & Backend",
+    description:
+      "An e-commerce platform combining a modern responsive interface with product management and backend services.",
+    technologies: [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+    ],
+    github:
+      "https://github.com/mariamibrahim2072006-blip/baianat-store",
+    image: "/projects/baianat.png",
+    icon: Code2,
+  },
+
+  {
+    title: "Admin Dashboard",
+    subtitle: "Management Dashboard",
+    category: "Dashboard Development",
+    description:
+      "A professional admin dashboard designed to manage application data, monitor information, and provide a clear and organized management interface.",
+    technologies: [
+      "React",
+      "JavaScript",
+      "CSS",
+      "Responsive UI",
+      "Dashboard",
+    ],
+    image: "/projects/admin-dashboard.png",
+    icon: Server,
+  },
+
+  {
+    title: "Skin Vision",
+    subtitle: "AI-Powered Skin Analysis",
+    category: "AI & Computer Vision",
+    description:
+      "An AI-powered skin analysis application that combines image processing and machine learning to analyze skin conditions and provide useful results through an interactive web interface.",
+    technologies: [
+      "Python",
+      "Flask",
+      "PyTorch",
+      "Computer Vision",
+      "EfficientNet-B0",
+      "SQLite",
+    ],
+    image: "/projects/skin-vision.png",
+    icon: Brain,
+  },
+];
+
+const skills = [
+  {
+    title: "Frontend Development",
+    icon: Code2,
+    description: "Building responsive and modern web interfaces.",
+    items: ["React", "TypeScript", "JavaScript", "Tailwind CSS", "Vite"],
+  },
+  {
+    title: "Backend & APIs",
+    icon: Server,
+    description:
+      "Developing APIs and connecting applications to databases.",
+    items: ["Node.js", "Express.js", "REST APIs", "Prisma", "MySQL"],
+  },
+  {
+    title: "AI & Engineering",
+    icon: Brain,
+    description:
+      "Applying AI concepts to practical software projects.",
+    items: ["Python", "Machine Learning", "Computer Vision", "Git", "SQL"],
+  },
+];
+
+const trainings = [
+  {
+    organization: "Digital Egypt Pioneers Initiative (DEPI)",
+    title: "Agentic AI & Generative AI System Developer",
+    type: "Professional Training",
+  },
+  {
+    organization: "Baianat",
+    title: "Frontend Development Summer Workshop",
+    type: "Workshop",
+  },
+  {
+    organization: "CodeAlpha",
+    title: "Software Development Internship",
+    type: "Internship",
+  },
+  {
+    organization: "Huawei ICT Academy",
+    title: "HCIA Cloud Computing",
+    type: "Technical Training",
+  },
+  {
+    organization: "Huawei ICT Academy",
+    title: "Artificial Intelligence Training",
+    type: "Technical Training",
+  },
+];
+
+const certificates = [
+  {
+    title: "HCIA Cloud Computing",
+    organization: "Huawei ICT Academy",
+  },
+  {
+    title: "Software Development Internship",
+    organization: "CodeAlpha",
+  },
+  {
+    title: "Frontend Development",
+    organization: "Baianat",
+  },
+];
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedProject, setSelectedProject] =
+    useState<Project | null>(null);
 
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: "smooth",
-    });
-    setMenuOpen(false);
+  const closeMenu = () => setMenuOpen(false);
+
+  const openProject = (project: Project) => {
+    if (project.demoUrl) {
+      setSelectedProject(project);
+    }
   };
 
-  const skills = [
-    {
-      title: "Frontend Development",
-      description:
-        "Building elegant, responsive and interactive interfaces with modern frontend technologies.",
-      icon: Monitor,
-      technologies: ["React", "TypeScript", "Tailwind CSS", "Vite"],
-    },
-    {
-      title: "Backend & APIs",
-      description:
-        "Creating reliable backend services and REST APIs that connect modern applications with data.",
-      icon: Database,
-      technologies: ["Node.js", "Express", "Prisma", "MongoDB"],
-    },
-    {
-      title: "AI & Engineering",
-      description:
-        "Combining Artificial Intelligence with software engineering to create useful digital experiences.",
-      icon: Bot,
-      technologies: ["Python", "Machine Learning", "AI", "Git"],
-    },
-  ];
-
-  const projects: Project[] = [
-    {
-      title: "Baianat Store",
-      category: "FULL-STACK E-COMMERCE",
-      description:
-        "A modern e-commerce application featuring a responsive React frontend with backend integration for products, authentication and orders.",
-      technologies: [
-        "React",
-        "TypeScript",
-        "Tailwind CSS",
-        "Node.js",
-        "Express",
-        "MongoDB",
-      ],
-      github: "https://github.com/mariamibrahim2072006-blip/baianat-store",
-      live: "https://baianat-frontend.vercel.app",
-      type: "image",
-      imageSrc: "/baianat-store.png",
-    },
-    {
-      title: "Skin Vision",
-      category: "AI / COMPUTER VISION",
-      description:
-        "An AI-powered system for preliminary burn assessment from mobile images using image segmentation and classification.",
-      technologies: [
-        "Python",
-        "PyTorch",
-        "EfficientNet-B0",
-        "U-Net",
-        "Flask",
-        "Computer Vision",
-      ],
-      github: "https://github.com/mariamibrahim2072006-blip",
-      live: "#",
-      type: "image",
-      imageSrc: "/skin-vision.jpg",
-    },
-    {
-      title: "Baianat Admin Dashboard",
-      category: "ADMIN DASHBOARD & ANALYTICS",
-      description:
-        "A comprehensive administrative dashboard featuring sales analytics overview, interactive charts, and recent orders management.",
-      technologies: ["React", "TypeScript", "Tailwind CSS", "Chart Analytics"],
-      github: "https://github.com/mariamibrahim2072006-blip/baianat-store",
-      live: "https://baianat-frontend.vercel.app/admin",
-      type: "image",
-      imageSrc: "/admin-dashboard.png",
-    },
-  ];
-
-  const education = [
-    {
-      title: "Artificial Intelligence Student",
-      organization: "Delta University for Science and Technology",
-      description:
-        "Studying Artificial Intelligence with a focus on software engineering, machine learning and modern technologies.",
-      icon: GraduationCap,
-    },
-  ];
-
-  const training = [
-    {
-      title: "Baianat Summer Workshop",
-      organization: "Frontend Development",
-      description:
-        "Practical frontend development training focused on modern web applications, responsive interfaces and real-world projects.",
-      icon: Briefcase,
-    },
-    {
-      title: "Digital Egypt Pioneers Initiative",
-      organization: "Agentic AI & Generative AI System Developer",
-      description:
-        "Training focused on Artificial Intelligence, Generative AI and building intelligent software systems.",
-      icon: Bot,
-    },
-    {
-      title: "CodeAlpha Internship",
-      organization: "Software Development",
-      description:
-        "Practical internship experience focused on software development, problem solving and technical projects.",
-      icon: Rocket,
-    },
-  ];
-
-  const certificates = [
-    {
-      title: "HCIA Cloud Computing",
-      organization: "Huawei ICT Academy",
-      description: "Cloud computing training through the Huawei ICT Academy.",
-      icon: Award,
-    },
-    {
-      title: "CodeAlpha Internship Certificate",
-      organization: "CodeAlpha",
-      description: "Internship experience in software development and practical technical work.",
-      icon: Award,
-    },
-    {
-      title: "Baianat Summer Workshop",
-      organization: "Baianat",
-      description: "Frontend development workshop and practical project experience.",
-      icon: Award,
-    },
-  ];
-
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#f5efe6] text-[#2d211b] selection:bg-[#8a6248] selection:text-white">
-      {/* ================= BACKGROUND ================= */}
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(173,132,92,0.18),transparent_28%),radial-gradient(circle_at_85%_20%,rgba(112,75,51,0.12),transparent_25%),radial-gradient(circle_at_50%_85%,rgba(201,167,126,0.15),transparent_30%)]" />
-        <div className="absolute -left-32 top-40 h-96 w-96 animate-[pulse_8s_ease-in-out_infinite] rounded-full bg-[#b58a63]/10 blur-3xl" />
-        <div className="absolute -right-32 top-[45%] h-96 w-96 animate-[pulse_10s_ease-in-out_infinite] rounded-full bg-[#704b35]/10 blur-3xl" />
-        <div className="absolute left-[40%] top-[75%] h-80 w-80 animate-[pulse_12s_ease-in-out_infinite] rounded-full bg-[#d3b28d]/20 blur-3xl" />
-        <div className="absolute inset-0 opacity-[0.035] bg-[linear-gradient(to_right,rgba(70,45,30,0.8)_1px,transparent_1px),linear-gradient(to_bottom,rgba(70,45,30,0.8)_1px,transparent_1px)] bg-size-[70px_70px]" />
-      </div>
-
-      {/* ================= NAVBAR ================= */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#6f503c]/10 bg-[#f5efe6]/80 backdrop-blur-2xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <button
-            onClick={() => scrollToSection("home")}
-            className="group flex items-center gap-3"
+    <div className="min-h-screen bg-white text-slate-900">
+      {/* NAVBAR */}
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+          <a
+            href="#home"
+            className="text-xl font-extrabold tracking-tight text-slate-950"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#8a6248]/20 bg-[#8a6248]/10 text-[#704b35] transition duration-300 group-hover:rotate-6 group-hover:bg-[#8a6248]/15">
-              <Terminal size={20} />
-            </span>
-            <span className="text-lg font-bold tracking-tight text-[#30231d]">
-              Mariam <span className="text-[#8a6248]">Ibrahim</span>
-            </span>
-          </button>
+            Mariam<span className="text-blue-600">.</span>
+          </a>
 
-          <div className="hidden items-center gap-7 md:flex">
-            {[
-              ["about", "About"],
-              ["skills", "Skills"],
-              ["education", "Education"],
-              ["training", "Training"],
-              ["projects", "Projects"],
-              ["certificates", "Certificates"],
-            ].map(([id, label]) => (
-              <button
-                key={id}
-                onClick={() => scrollToSection(id)}
-                className="text-sm font-medium text-[#806d60] transition hover:text-[#704b35]"
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          <nav className="hidden items-center gap-8 md:flex">
+            {["About", "Skills", "Projects", "Training", "Contact"].map(
+              (item) => (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="text-sm font-medium text-slate-600 transition hover:text-blue-600"
+                >
+                  {item}
+                </a>
+              ),
+            )}
+          </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <a
-              href="/Mariam-Ibrahim-CV.pdf"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl border border-[#6f503c]/15 bg-white/60 px-4 py-2.5 text-sm font-semibold text-[#5d4637] transition hover:border-[#8a6248]/30 hover:bg-white hover:text-[#704b35]"
-            >
-              <FileText size={16} />
-              CV
-            </a>
-            <button
-              onClick={() => scrollToSection("contact")}
-              className="rounded-xl bg-[#5c3d2b] px-5 py-2.5 text-sm font-bold text-[#fffaf3] shadow-lg shadow-[#5c3d2b]/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[#704b35]"
-            >
-              Let's Talk
-            </button>
-          </div>
+          <a
+            href="#contact"
+            className="hidden rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 transition hover:border-blue-600 hover:text-blue-600 md:block"
+          >
+            Let's Talk
+          </a>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="rounded-xl border border-[#6f503c]/15 bg-white/50 p-2 text-[#5d4637] md:hidden"
+            className="rounded-lg border border-slate-200 p-2 text-slate-700 md:hidden"
             aria-label="Toggle menu"
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
-        </nav>
+        </div>
 
         {menuOpen && (
-          <div className="border-t border-[#6f503c]/10 bg-[#f5efe6]/95 px-6 py-5 backdrop-blur-xl md:hidden">
-            <div className="flex flex-col gap-5">
-              {[
-                ["about", "About"],
-                ["skills", "Skills"],
-                ["education", "Education"],
-                ["training", "Training"],
-                ["projects", "Projects"],
-                ["certificates", "Certificates"],
-              ].map(([id, label]) => (
-                <button
-                  key={id}
-                  onClick={() => scrollToSection(id)}
-                  className="text-left text-[#6f5a4b] transition hover:text-[#704b35]"
-                >
-                  {label}
-                </button>
-              ))}
-              <a
-                href="/Mariam-Ibrahim-CV.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-[#6f5a4b] transition hover:text-[#704b35]"
-              >
-                <FileText size={17} />
-                View CV
-              </a>
-              <button
-                onClick={() => scrollToSection("contact")}
-                className="rounded-xl bg-[#5c3d2b] px-5 py-3 text-center font-bold text-[#fffaf3]"
-              >
-                Let's Talk
-              </button>
-            </div>
+          <div className="border-t border-slate-200 bg-white px-6 py-5 md:hidden">
+            <nav className="flex flex-col gap-4">
+              {["About", "Skills", "Projects", "Training", "Contact"].map(
+                (item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    onClick={closeMenu}
+                    className="text-sm font-semibold text-slate-700"
+                  >
+                    {item}
+                  </a>
+                ),
+              )}
+            </nav>
           </div>
         )}
       </header>
 
-      {/* ================= HERO ================= */}
-      <section
-        id="home"
-        className="relative flex min-h-screen items-center px-6 pb-20 pt-32"
-      >
-        <div className="mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.15fr_0.85fr]">
-          <div>
-            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#8a6248]/20 bg-white/60 px-4 py-2 text-sm font-medium text-[#76523b] shadow-sm backdrop-blur">
-              <Sparkles size={16} />
-              Frontend Developer & AI Student
-            </div>
+      {/* HERO */}
+      <main id="home">
+        <section className="relative overflow-hidden border-b border-slate-200 bg-slate-950 pt-20 text-white">
+          <div className="absolute inset-0">
+            <div className="absolute -left-32 top-20 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl" />
+            <div className="absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-indigo-600/15 blur-3xl" />
 
-            <h1 className="max-w-5xl text-5xl font-black leading-[1.03] tracking-tight text-[#30231d] sm:text-6xl lg:text-7xl">
-              I build{" "}
-              <span className="bg-linear-to-r from-[#5c3d2b] via-[#8a6248] to-[#b48a64] bg-clip-text text-transparent">
-                digital experiences
-              </span>{" "}
-              that feel alive.
-            </h1>
+            <div className="absolute inset-0 opacity-[0.04] [background-image:linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)] [background-size:60px_60px]" />
+          </div>
 
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-[#806d60]">
-              I'm Mariam Ibrahim, an AI student and frontend developer
-              passionate about creating beautiful, responsive and
-              intelligent web experiences using modern technologies.
-            </p>
-
-            <div className="mt-9 flex flex-wrap gap-4">
-              <button
-                onClick={() => scrollToSection("projects")}
-                className="group inline-flex items-center gap-2 rounded-2xl bg-[#5c3d2b] px-7 py-4 font-bold text-[#fffaf3] shadow-xl shadow-[#5c3d2b]/20 transition duration-300 hover:-translate-y-1 hover:bg-[#704b35]"
-              >
-                View My Work
-                <ArrowUpRight
-                  size={18}
-                  className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-                />
-              </button>
-
-              <a
-                href="/Mariam-Ibrahim-CV.pdf"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-2xl border border-[#6f503c]/15 bg-white/70 px-7 py-4 font-semibold text-[#5d4637] shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#8a6248]/30 hover:bg-white"
-              >
-                <Download size={18} />
-                View CV
-              </a>
-            </div>
-
-            <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-[#958174]">
-              <span className="flex items-center gap-2">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[#7b8a5a]" />
+          <div className="relative mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-[1.2fr_0.8fr] lg:px-8">
+            <div>
+              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-blue-400/25 bg-blue-500/10 px-4 py-2 text-sm font-medium text-blue-300">
+                <span className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.9)]" />
                 Available for opportunities
-              </span>
-              <span className="flex items-center gap-2">
-                <Globe size={16} />
-                Egypt
-              </span>
-            </div>
-          </div>
-
-          {/* CODE CARD */}
-          <div className="relative mx-auto w-full max-w-md">
-            <div className="absolute -inset-6 rounded-4xl bg-[#8a6248]/15 blur-3xl" />
-            <div className="relative overflow-hidden rounded-4xl border border-[#6f503c]/15 bg-[#fffaf3]/85 p-6 shadow-2xl shadow-[#5c3d2b]/10 backdrop-blur-xl">
-              <div className="mb-5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-[#b97968]" />
-                  <span className="h-3 w-3 rounded-full bg-[#c6a15b]" />
-                  <span className="h-3 w-3 rounded-full bg-[#7b8a5a]" />
-                </div>
-                <span className="text-xs text-[#a18d7f]">skin-vision.ts</span>
               </div>
 
-              <div className="rounded-2xl border border-[#6f503c]/10 bg-[#30231d] p-6 font-mono text-sm shadow-inner">
-                <p className="text-[#9e8777]">// skin vision app</p>
-                <p className="mt-4">
-                  <span className="text-[#d6a56d]">const</span>{" "}
-                  <span className="text-[#d8b98c]">skinVision</span>{" "}
-                  <span className="text-[#a78f7d]">=</span>{" "}
-                  <span className="text-[#b9c18a]">{"{"}</span>
-                </p>
-                <p className="pl-5">
-                  <span className="text-[#a78f7d]">name:</span>{" "}
-                  <span className="text-[#e0c49d]">'Skin Vision'</span>,
-                </p>
-                <p className="pl-5">
-                  <span className="text-[#a78f7d]">feature:</span>{" "}
-                  <span className="text-[#e0c49d]">'AI Burn Assessment'</span>,
-                </p>
-                <p className="pl-5">
-                  <span className="text-[#a78f7d]">tech:</span>{" "}
-                  <span className="text-[#e0c49d]">['U-Net', 'EfficientNet']</span>
-                </p>
-                <p>
-                  <span className="text-[#b9c18a]">{"}"}</span>
-                </p>
-                <div className="mt-6 flex items-center gap-2 text-[#d3a873]">
-                  <Zap size={15} />
-                  <span>AI Powered...</span>
-                  <span className="animate-pulse">_</span>
+              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-blue-400">
+                Frontend Developer · AI Student
+              </p>
+
+              <h1 className="max-w-4xl text-5xl font-black leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+                I build digital
+                <span className="block text-blue-500">
+                  experiences
+                </span>
+                that work.
+              </h1>
+
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
+                I’m Mariam Ibrahim, an AI student and developer focused on
+                building modern web applications, full-stack systems, and
+                practical AI-powered solutions.
+              </p>
+
+              <div className="mt-10 flex flex-wrap gap-4">
+                <a
+                  href="#projects"
+                  className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 font-semibold text-white transition hover:bg-blue-500"
+                >
+                  Explore My Work
+
+                  <ArrowRight
+                    size={18}
+                    className="transition group-hover:translate-x-1"
+                  />
+                </a>
+
+                <a
+                  href="/Mariam-Ibrahim-CV.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3.5 font-semibold text-white transition hover:border-white hover:bg-white hover:text-slate-950"
+                >
+                  View CV
+                  <ExternalLink size={17} />
+                </a>
+              </div>
+
+              <div className="mt-12 flex items-center gap-8 text-sm text-slate-400">
+                <div>
+                  <strong className="block text-2xl font-bold text-white">
+                    6
+                  </strong>
+                  Projects
+                </div>
+
+                <div className="h-10 w-px bg-slate-700" />
+
+                <div>
+                  <strong className="block text-2xl font-bold text-white">
+                    5
+                  </strong>
+                  Trainings
+                </div>
+
+                <div className="h-10 w-px bg-slate-700" />
+
+                <div>
+                  <strong className="block text-2xl font-bold text-white">
+                    AI
+                  </strong>
+                  Major
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <button
-          onClick={() => scrollToSection("about")}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-[#9a8678] transition hover:text-[#704b35]"
-          aria-label="Scroll down"
-        >
-          <ArrowDown size={22} />
-        </button>
-      </section>
+            <div className="hidden lg:block">
+              <div className="relative mx-auto max-w-md">
+                <div className="absolute -inset-5 rounded-3xl bg-blue-500/10 blur-2xl" />
 
-      {/* ================= ABOUT ================= */}
-      <section id="about" className="border-t border-[#6f503c]/10 px-6 py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-                About Me
-              </p>
-              <h2 className="text-4xl font-bold leading-tight text-[#30231d] sm:text-5xl">
-                Turning ideas into{" "}
-                <span className="text-[#8a6248]">real products.</span>
-              </h2>
-            </div>
-            <div className="space-y-5 text-lg leading-8 text-[#806d60]">
-              <p>
-                I'm an Artificial Intelligence student with a strong interest in
-                Frontend Development and modern web technologies.
-              </p>
-              <p>
-                I enjoy transforming ideas and designs into clean, responsive
-                and interactive user interfaces like Skin Vision.
-              </p>
-              <p>
-                My AI background gives me a different perspective when building
-                intelligent and data-driven digital experiences.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= SKILLS ================= */}
-      <section
-        id="skills"
-        className="border-y border-[#6f503c]/10 bg-[#ebe1d4]/45 px-6 py-28"
-      >
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-14">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-              My Skills
-            </p>
-            <h2 className="text-4xl font-bold text-[#30231d] sm:text-5xl">
-              Technologies I work with
-            </h2>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {skills.map((skill) => {
-              const Icon = skill.icon;
-              return (
-                <article
-                  key={skill.title}
-                  className="group rounded-3xl border border-[#6f503c]/10 bg-[#fffaf3]/75 p-7 shadow-sm transition duration-500 hover:-translate-y-2 hover:border-[#8a6248]/25 hover:bg-[#fffaf3] hover:shadow-xl hover:shadow-[#5c3d2b]/10"
-                >
-                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#8a6248]/10 text-[#704b35] transition duration-500 group-hover:scale-110 group-hover:bg-[#8a6248]/15">
-                    <Icon size={27} />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#382920]">
-                    {skill.title}
-                  </h3>
-                  <p className="mt-4 text-sm leading-7 text-[#806d60]">
-                    {skill.description}
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {skill.technologies.map((technology) => (
-                      <span
-                        key={technology}
-                        className="rounded-lg border border-[#6f503c]/10 bg-[#f5efe6] px-3 py-1.5 text-xs text-[#6f5a4b]"
-                      >
-                        {technology}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= EDUCATION ================= */}
-      <section id="education" className="px-6 py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-14">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-              Education
-            </p>
-            <h2 className="text-4xl font-bold text-[#30231d] sm:text-5xl">
-              Academic Background
-            </h2>
-          </div>
-          <div className="grid gap-6">
-            {education.map((item) => {
-              const Icon = item.icon;
-              return (
-                <article
-                  key={item.title}
-                  className="group rounded-4xl border border-[#6f503c]/10 bg-[#fffaf3]/75 p-8 shadow-sm transition duration-500 hover:border-[#8a6248]/25 hover:bg-[#fffaf3] hover:shadow-xl hover:shadow-[#5c3d2b]/10"
-                >
-                  <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-[#8a6248]/20 bg-[#8a6248]/10 text-[#704b35]">
-                      <Icon size={30} />
+                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-7 shadow-2xl backdrop-blur-xl">
+                  <div className="mb-8 flex items-center justify-between">
+                    <div className="flex gap-2">
+                      <span className="h-3 w-3 rounded-full bg-red-400" />
+                      <span className="h-3 w-3 rounded-full bg-yellow-400" />
+                      <span className="h-3 w-3 rounded-full bg-green-400" />
                     </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-[#382920]">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 font-medium text-[#8a6248]">
-                        {item.organization}
-                      </p>
-                      <p className="mt-4 max-w-3xl leading-7 text-[#806d60]">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* ================= TRAINING ================= */}
-      <section
-        id="training"
-        className="border-y border-[#6f503c]/10 bg-[#ebe1d4]/45 px-6 py-28"
-      >
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-14">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-              Training & Experience
-            </p>
-            <h2 className="text-4xl font-bold text-[#30231d] sm:text-5xl">
-              Learning by building.
-            </h2>
-          </div>
-          <div className="grid gap-6 lg:grid-cols-3">
-            {training.map((item) => {
-              const Icon = item.icon;
-              return (
-                <article
-                  key={item.title}
-                  className="group rounded-3xl border border-[#6f503c]/10 bg-[#fffaf3]/75 p-7 shadow-sm transition duration-500 hover:-translate-y-2 hover:border-[#8a6248]/25 hover:bg-[#fffaf3] hover:shadow-xl hover:shadow-[#5c3d2b]/10"
-                >
-                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#8a6248]/10 text-[#704b35] transition group-hover:scale-110">
-                    <Icon size={27} />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#382920]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm font-medium text-[#8a6248]">
-                    {item.organization}
-                  </p>
-                  <p className="mt-4 text-sm leading-7 text-[#806d60]">
-                    {item.description}
-                  </p>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= PROJECTS ================= */}
-      <section id="projects" className="px-6 py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-14 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-            <div>
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-                Selected Work
-              </p>
-              <h2 className="text-4xl font-bold text-[#30231d] sm:text-5xl">
-                Featured Projects
-              </h2>
-            </div>
-            <p className="max-w-md text-sm leading-6 text-[#958174]">
-              A selection of projects showcasing my frontend, full-stack, AI and
-              problem-solving skills.
-            </p>
-          </div>
-
-          <div className="grid gap-8 lg:grid-cols-2">
-            {projects.map((project) => {
-              return (
-                <article
-                  key={project.title}
-                  className="group overflow-hidden rounded-4xl border border-[#6f503c]/10 bg-[#fffaf3]/80 shadow-sm transition duration-500 hover:-translate-y-2 hover:border-[#8a6248]/25 hover:shadow-2xl hover:shadow-[#5c3d2b]/10"
-                >
-                  <div className="relative h-64 overflow-hidden bg-[#e8ddcf]">
-                    <div className="absolute inset-0 opacity-40 bg-[linear-gradient(to_right,rgba(92,61,43,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(92,61,43,0.08)_1px,transparent_1px)] bg-size-[40px_40px]" />
-
-                    {project.type === "image" ? (
-                      <div className="absolute inset-0 flex items-center justify-center p-4">
-                        <img
-                          src={project.imageSrc}
-                          alt={project.title}
-                          className="h-full w-full rounded-2xl object-cover shadow-xl transition duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="rounded-3xl border border-[#6f503c]/10 bg-[#fffaf3]/80 p-8 shadow-2xl backdrop-blur-xl transition duration-500 group-hover:scale-105">
-                          {project.icon && (
-                            <project.icon size={55} className="text-[#704b35]" />
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="absolute left-6 top-6 rounded-full border border-[#6f503c]/10 bg-[#fffaf3]/85 px-3 py-1.5 text-xs font-medium text-[#76523b] backdrop-blur">
-                      {project.category}
-                    </div>
+                    <span className="font-mono text-xs text-slate-500">
+                      developer.ts
+                    </span>
                   </div>
 
-                  <div className="p-8">
-                    <h3 className="text-2xl font-bold text-[#382920]">
-                      {project.title}
-                    </h3>
-                    <p className="mt-4 leading-7 text-[#806d60]">
-                      {project.description}
+                  <div className="font-mono text-sm leading-8">
+                    <p>
+                      <span className="text-purple-400">const</span>{" "}
+                      <span className="text-blue-300">mariam</span> = {"{"}
                     </p>
+
+                    <p className="pl-5">
+                      <span className="text-slate-400">role:</span>{" "}
+                      <span className="text-green-300">
+                        "Frontend Developer"
+                      </span>
+                      ,
+                    </p>
+
+                    <p className="pl-5">
+                      <span className="text-slate-400">major:</span>{" "}
+                      <span className="text-green-300">"AI"</span>,
+                    </p>
+
+                    <p className="pl-5">
+                      <span className="text-slate-400">focus:</span> [
+                    </p>
+
+                    <p className="pl-10 text-blue-300">"React",</p>
+                    <p className="pl-10 text-blue-300">"Full-Stack",</p>
+                    <p className="pl-10 text-blue-300">"AI"</p>
+
+                    <p className="pl-5">],</p>
+
+                    <p className="pl-5">
+                      <span className="text-slate-400">mindset:</span>{" "}
+                      <span className="text-green-300">
+                        "Build & Learn"
+                      </span>
+                    </p>
+
+                    <p>{"};"}</p>
+                  </div>
+
+                  <div className="mt-8 flex items-center gap-3 rounded-xl border border-blue-400/20 bg-blue-500/10 p-4">
+                    <CheckCircle2
+                      className="text-blue-400"
+                      size={20}
+                    />
+
+                    <span className="text-sm text-slate-300">
+                      Turning ideas into working products.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <a
+            href="#about"
+            className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-xs font-medium uppercase tracking-widest text-slate-500 transition hover:text-white lg:flex"
+          >
+            Scroll to explore
+            <ArrowDown size={15} />
+          </a>
+        </section>
+
+        {/* ABOUT */}
+        <section id="about" className="bg-white py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
+              <div>
+                <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+                  About me
+                </p>
+
+                <h2 className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                  Developer with an
+                  <span className="block text-blue-600">
+                    AI mindset.
+                  </span>
+                </h2>
+              </div>
+
+              <div className="space-y-6 text-lg leading-8 text-slate-600">
+                <p>
+                  I’m a Computer Science & AI student passionate about
+                  software development and building useful digital products.
+                </p>
+
+                <p>
+                  My work combines frontend development, backend engineering,
+                  databases, and AI. I enjoy taking an idea from a concept to
+                  a working, polished application.
+                </p>
+
+                <div className="grid gap-4 pt-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <GraduationCap
+                      className="mb-4 text-blue-600"
+                      size={25}
+                    />
+
+                    <h3 className="font-bold text-slate-950">
+                      AI Student
+                    </h3>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      Building a strong foundation in AI & software
+                      engineering.
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <Code2
+                      className="mb-4 text-blue-600"
+                      size={25}
+                    />
+
+                    <h3 className="font-bold text-slate-950">
+                      Developer
+                    </h3>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      Creating responsive and functional web applications.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SKILLS */}
+        <section
+          id="skills"
+          className="border-y border-slate-200 bg-slate-50 py-24"
+        >
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mb-14 max-w-2xl">
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+                What I work with
+              </p>
+
+              <h2 className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                Skills & Technologies
+              </h2>
+
+              <p className="mt-5 text-lg leading-8 text-slate-600">
+                A growing technical toolkit built through university,
+                training, internships, and real projects.
+              </p>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-3">
+              {skills.map((skill) => {
+                const Icon = skill.icon;
+
+                return (
+                  <div
+                    key={skill.title}
+                    className="group rounded-2xl border border-slate-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-slate-200/60"
+                  >
+                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+                      <Icon size={24} />
+                    </div>
+
+                    <h3 className="text-xl font-bold text-slate-950">
+                      {skill.title}
+                    </h3>
+
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      {skill.description}
+                    </p>
+
                     <div className="mt-6 flex flex-wrap gap-2">
-                      {project.technologies.map((technology) => (
+                      {skill.items.map((item) => (
                         <span
-                          key={technology}
-                          className="rounded-lg bg-[#ebe1d4] px-3 py-1.5 text-xs text-[#6f5a4b]"
+                          key={item}
+                          className="rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600"
                         >
-                          {technology}
+                          {item}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-8 flex items-center gap-5 border-t border-[#6f503c]/10 pt-6">
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 text-sm text-[#6f5a4b] transition hover:text-[#704b35]"
-                      >
-                        <Code2 size={17} />
-                        GitHub
-                      </a>
-                      {project.live !== "#" && (
-                        <a
-                          href={project.live}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 text-sm font-semibold text-[#704b35] transition hover:text-[#8a6248]"
-                        >
-                          Live Demo
-                          <ExternalLink size={17} />
-                        </a>
-                      )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* PROJECTS */}
+        <section id="projects" className="bg-white py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+              <div>
+                <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+                  Selected work
+                </p>
+
+                <h2 className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                  Projects
+                </h2>
+              </div>
+
+              <p className="max-w-md text-sm leading-6 text-slate-500">
+                Real projects built to practice product development,
+                full-stack engineering, AI, and modern web technologies.
+              </p>
+            </div>
+
+            <div className="grid gap-7 md:grid-cols-2">
+              {projects.map((project, index) => {
+                const Icon = project.icon;
+
+                return (
+                  <article
+                    key={project.title}
+                    className={`group overflow-hidden rounded-3xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-2xl hover:shadow-slate-200/70 ${project.featured
+                        ? "md:col-span-2"
+                        : ""
+                      }`}
+                  >
+                    {/* PROJECT IMAGE */}
+                    <div
+                      className={`relative overflow-hidden bg-slate-100 ${project.featured
+                          ? "h-[300px] md:h-[390px]"
+                          : "h-[260px]"
+                        }`}
+                    >
+                      <img
+                        src={project.image}
+                        alt={`${project.title} project screenshot`}
+                        className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.02]"
+                      />
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-70" />
+
+                      <div className="absolute left-5 top-5 flex items-center gap-3">
+                        <span className="rounded-lg border border-white/20 bg-slate-950/80 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-md">
+                          0{index + 1}
+                        </span>
+
+                        <span className="rounded-lg border border-white/20 bg-slate-950/80 px-3 py-1.5 text-xs font-semibold text-blue-300 backdrop-blur-md">
+                          {project.category}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* PROJECT INFO */}
+                    <div className="p-7 md:p-8">
+                      <div className="flex items-start justify-between gap-5">
+                        <div>
+                          <p className="text-sm font-semibold text-blue-600">
+                            {project.subtitle}
+                          </p>
+
+                          <h3 className="mt-1 text-2xl font-black text-slate-950">
+                            {project.title}
+                          </h3>
+                        </div>
+
+                        <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 sm:flex">
+                          <Icon size={21} />
+                        </div>
+                      </div>
+
+                      <p className="mt-4 text-base leading-7 text-slate-600">
+                        {project.description}
+                      </p>
+
+                      <div className="mt-6 flex flex-wrap gap-2">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-600"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="mt-8 flex flex-wrap gap-3">
+                        {project.demoUrl && (
+                          <button
+                            onClick={() => openProject(project)}
+                            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-700"
+                          >
+                            <Play size={16} fill="currentColor" />
+                            Watch Demo
+                          </button>
+                        )}
+
+                        {project.github && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-5 py-3 text-sm font-bold text-slate-800 transition hover:border-slate-950 hover:bg-slate-950 hover:text-white"
+                          >
+                            <span className="text-base font-bold">
+                              GH
+                            </span>
+                            View Code
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* TRAINING */}
+        <section
+          id="training"
+          className="border-y border-slate-200 bg-slate-950 py-24 text-white"
+        >
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mb-14 max-w-2xl">
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-blue-400">
+                Continuous learning
+              </p>
+
+              <h2 className="text-4xl font-black tracking-tight sm:text-5xl">
+                Training & Experience
+              </h2>
+
+              <p className="mt-5 text-lg leading-8 text-slate-400">
+                Training experiences that helped me expand my technical
+                knowledge beyond university.
+              </p>
+            </div>
+
+            <div className="relative">
+              <div className="absolute bottom-0 left-[19px] top-0 hidden w-px bg-slate-800 sm:block" />
+
+              <div className="space-y-5">
+                {trainings.map((training) => (
+                  <div
+                    key={`${training.organization}-${training.title}`}
+                    className="relative flex gap-5 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 transition hover:border-blue-500/40"
+                  >
+                    <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400">
+                      <CalendarDays size={18} />
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-blue-400">
+                        {training.type}
+                      </p>
+
+                      <h3 className="mt-1 text-lg font-bold text-white">
+                        {training.title}
+                      </h3>
+
+                      <p className="mt-1 text-sm text-slate-400">
+                        {training.organization}
+                      </p>
                     </div>
                   </div>
-                </article>
-              );
-            })}
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ================= CERTIFICATES ================= */}
-      <section
-        id="certificates"
-        className="border-y border-[#6f503c]/10 bg-[#ebe1d4]/45 px-6 py-28"
-      >
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-14">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-              Certificates & Credentials
-            </p>
-            <h2 className="text-4xl font-bold text-[#30231d] sm:text-5xl">
-              Continuous learning.
-            </h2>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {certificates.map((certificate) => {
-              const Icon = certificate.icon;
-              return (
-                <article
-                  key={certificate.title}
-                  className="group rounded-3xl border border-[#6f503c]/10 bg-[#fffaf3]/75 p-7 shadow-sm transition duration-500 hover:-translate-y-2 hover:border-[#8a6248]/25 hover:bg-[#fffaf3] hover:shadow-xl hover:shadow-[#5c3d2b]/10"
+        {/* CERTIFICATES */}
+        <section className="bg-slate-50 py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mb-12">
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+                Credentials
+              </p>
+
+              <h2 className="text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                Certificates
+              </h2>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-3">
+              {certificates.map((certificate) => (
+                <div
+                  key={`${certificate.organization}-${certificate.title}`}
+                  className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-6"
                 >
-                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#8a6248]/10 text-[#704b35] transition group-hover:scale-110">
-                    <Icon size={27} />
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <ShieldCheck size={22} />
                   </div>
-                  <h3 className="text-xl font-bold text-[#382920]">
-                    {certificate.title}
-                  </h3>
-                  <p className="mt-2 text-sm font-medium text-[#8a6248]">
-                    {certificate.organization}
-                  </p>
-                  <p className="mt-4 text-sm leading-7 text-[#806d60]">
-                    {certificate.description}
-                  </p>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
-      {/* ================= PROFILES ================= */}
-      <section className="px-6 py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-              Find Me Online
-            </p>
-            <h2 className="text-4xl font-bold text-[#30231d] sm:text-5xl">
-              Let's connect.
-            </h2>
-          </div>
-          <div className="grid gap-5 md:grid-cols-3">
-            <a
-              href="https://github.com/mariamibrahim2072006-blip"
-              target="_blank"
-              rel="noreferrer"
-              className="group rounded-3xl border border-[#6f503c]/10 bg-[#fffaf3]/75 p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-[#8a6248]/25 hover:bg-white hover:shadow-xl"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#30231d] font-black text-lg text-[#fffaf3] transition group-hover:bg-[#5c3d2b]">
-                GH
-              </div>
-              <h3 className="text-xl font-bold text-[#382920]">GitHub</h3>
-              <p className="mt-2 text-sm text-[#958174]">Projects & source code</p>
-              <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#704b35]">
-                Visit Profile
-                <ArrowUpRight size={16} />
-              </div>
-            </a>
+                  <div>
+                    <h3 className="font-bold text-slate-950">
+                      {certificate.title}
+                    </h3>
 
-            <a
-              href="https://khamsat.com/user/mariamibrahim00"
-              target="_blank"
-              rel="noreferrer"
-              className="group rounded-3xl border border-[#6f503c]/10 bg-[#fffaf3]/75 p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-[#8a6248]/25 hover:bg-white hover:shadow-xl"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#8a6248]/10 font-black text-sm text-[#704b35] transition group-hover:bg-[#8a6248]/20">
-                K
-              </div>
-              <h3 className="text-xl font-bold text-[#382920]">Khamsat</h3>
-              <p className="mt-2 text-sm text-[#958174]">Freelance services</p>
-              <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#704b35]">
-                Visit Profile
-                <ArrowUpRight size={16} />
-              </div>
-            </a>
-
-            <a
-              href="https://www.linkedin.com/in/mariam-ibrahim-109a8a350/"
-              target="_blank"
-              rel="noreferrer"
-              className="group rounded-3xl border border-[#6f503c]/10 bg-[#fffaf3]/75 p-7 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-[#8a6248]/25 hover:bg-white hover:shadow-xl"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#8a6248]/10 font-black text-sm text-[#704b35] transition group-hover:bg-[#8a6248]/20">
-                in
-              </div>
-              <h3 className="text-xl font-bold text-[#382920]">LinkedIn</h3>
-              <p className="mt-2 text-sm text-[#958174]">Professional profile</p>
-              <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#704b35]">
-                Visit Profile
-                <ArrowUpRight size={16} />
-              </div>
-            </a>
+                    <p className="mt-1 text-sm text-slate-500">
+                      {certificate.organization}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ================= CONTACT ================= */}
-      <section id="contact" className="px-6 py-28">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="mx-auto mb-7 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#8a6248]/20 bg-[#8a6248]/10 text-[#704b35]">
-            <Mail size={28} />
+        {/* CONTACT */}
+        <section id="contact" className="bg-white py-24">
+          <div className="mx-auto max-w-5xl px-6 lg:px-8">
+            <div className="relative overflow-hidden rounded-3xl bg-slate-950 px-7 py-16 text-center text-white md:px-16">
+              <div className="absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-600/20 blur-3xl" />
+
+              <div className="relative">
+                <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-blue-400">
+                  Get in touch
+                </p>
+
+                <h2 className="text-4xl font-black tracking-tight sm:text-5xl">
+                  Have an idea?
+                  <span className="block text-blue-500">
+                    Let’s build it.
+                  </span>
+                </h2>
+
+                <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-slate-400">
+                  I’m always interested in new projects, internships,
+                  collaborations, and opportunities to learn and build.
+                </p>
+
+                <div className="mt-9 flex flex-wrap justify-center gap-4">
+                  <a
+                    href="mailto:mariamibrahim2072006@gmail.com"
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-6 py-3.5 font-bold text-white transition hover:border-white hover:bg-white hover:text-slate-950"
+                  >
+                    <Mail size={18} />
+                    Email Me
+                  </a>
+
+                  <a
+                    href="https://github.com/mariamibrahim2072006-blip"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-6 py-3.5 font-bold text-white transition hover:border-white"
+                  >
+                    <span className="text-base font-bold">GH</span>
+                    GitHub
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#8a6248]">
-            Get In Touch
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="border-t border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-7 text-sm text-slate-500 md:flex-row lg:px-8">
+          <p>
+            © {new Date().getFullYear()} Mariam Ibrahim. All rights
+            reserved.
           </p>
-          <h2 className="mt-4 text-4xl font-bold text-[#30231d] sm:text-6xl">
-            Let's build something{" "}
-            <span className="text-[#8a6248]">great.</span>
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl leading-8 text-[#806d60]">
-            Have a project, opportunity or idea? I'd love to hear about it and
-            see how we can turn it into something amazing.
-          </p>
-          <div className="mt-9 flex flex-wrap justify-center gap-4">
-            <a
-              href="mailto:mariamibrahim2072006@gmail.com"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#5c3d2b] px-7 py-4 font-bold text-[#fffaf3] shadow-xl shadow-[#5c3d2b]/20 transition hover:-translate-y-1 hover:bg-[#704b35]"
-            >
-              <Mail size={19} />
-              Email Me
-            </a>
-            <a
-              href="https://www.linkedin.com/in/mariam-ibrahim-109a8a350/"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-2xl border border-[#6f503c]/15 bg-white/70 px-7 py-4 font-semibold text-[#5d4637] transition hover:-translate-y-1 hover:border-[#8a6248]/30 hover:bg-white"
-            >
-              LinkedIn
-              <ArrowUpRight size={18} />
-            </a>
-          </div>
-        </div>
-      </section>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="border-t border-[#6f503c]/10 px-6 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-[#958174] sm:flex-row">
-          <p>© {new Date().getFullYear()} Mariam Ibrahim. All rights reserved.</p>
           <div className="flex items-center gap-2">
-            Built with <span className="font-semibold text-[#704b35]">React</span> &{" "}
-            <span className="font-semibold text-[#704b35]">Tailwind</span>
+            Built with
+            <span className="font-semibold text-slate-800">
+              React
+            </span>
+            <span>·</span>
+            <span className="font-semibold text-blue-600">
+              TypeScript
+            </span>
           </div>
         </div>
       </footer>
-    </main>
+
+      {/* VIDEO MODAL */}
+      {selectedProject && selectedProject.demoUrl && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-sm"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="relative flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-slate-900 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex shrink-0 items-center justify-between border-b border-slate-800 px-5 py-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-blue-400">
+                  Project Demo
+                </p>
+
+                <h3 className="mt-1 font-bold text-white">
+                  {selectedProject.title}
+                </h3>
+              </div>
+
+              <button
+                onClick={() => setSelectedProject(null)}
+                className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white"
+                aria-label="Close demo"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1 bg-black">
+              <iframe
+                src={selectedProject.demoUrl}
+                title={`${selectedProject.title} demo`}
+                className="h-full w-full"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+              />
+            </div>
+
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-slate-800 bg-slate-900 px-5 py-4">
+              <span className="text-xs text-slate-500">
+                Video demonstration of the project
+              </span>
+
+              <div className="flex gap-2">
+                <a
+                  href={selectedProject.demoUrl.replace(
+                    "/preview",
+                    "/view",
+                  )}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-white transition hover:border-slate-500"
+                >
+                  Open Demo
+                  <ExternalLink size={15} />
+                </a>
+
+                {selectedProject.github && (
+                  <a
+                    href={selectedProject.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"
+                  >
+                    <span className="text-xs font-bold">GH</span>
+                    View Code
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

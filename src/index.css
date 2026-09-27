@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-/* =========================================
-   MARIAM PORTFOLIO
-   Elegant Beige / Brown Theme
-========================================= */
-
 :root {
   font-family:
     Inter,
@@ -15,8 +10,9 @@
     "Segoe UI",
     sans-serif;
 
-  color: #3f3328;
-  background: #f7f3ed;
+  color: #0f172a;
+  background: #ffffff;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -31,164 +27,62 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 15% 20%,
-      rgba(184, 148, 102, 0.12),
-      transparent 28%),
-    radial-gradient(circle at 85% 35%,
-      rgba(126, 92, 61, 0.08),
-      transparent 30%),
-    linear-gradient(135deg,
-      #faf7f2 0%,
-      #f4eee6 45%,
-      #eee5da 100%);
-  color: #3f3328;
+  background: #ffffff;
 }
 
-/* =========================================
-   Elegant animated background
-========================================= */
-
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  pointer-events: none;
-  z-index: -1;
-  border-radius: 9999px;
-  filter: blur(90px);
-  opacity: 0.35;
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
-body::before {
-  width: 420px;
-  height: 420px;
-  top: 5%;
-  left: -140px;
-  background: rgba(171, 133, 91, 0.18);
-  animation: floatOne 16s ease-in-out infinite;
+button {
+  font: inherit;
 }
 
-body::after {
-  width: 380px;
-  height: 380px;
-  right: -120px;
-  bottom: 5%;
-  background: rgba(116, 83, 55, 0.12);
-  animation: floatTwo 19s ease-in-out infinite;
+a {
+  color: inherit;
+  text-decoration: none;
 }
-
-@keyframes floatOne {
-
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate3d(80px, 45px, 0) scale(1.12);
-  }
-}
-
-@keyframes floatTwo {
-
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate3d(-70px, -50px, 0) scale(1.08);
-  }
-}
-
-/* =========================================
-   Selection
-========================================= */
 
 ::selection {
-  background: #8b6b4a;
-  color: #fffaf4;
+  background: #2563eb;
+  color: #ffffff;
 }
-
-/* =========================================
-   Scrollbar
-========================================= */
 
 ::-webkit-scrollbar {
   width: 9px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #eee6dc;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #a88b6b;
+  background: #94a3b8;
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #806344;
+  background: #64748b;
 }
-
-/* =========================================
-   Links
-========================================= */
-
-a {
-  color: inherit;
-}
-
-/* =========================================
-   Buttons
-========================================= */
-
-button {
-  font: inherit;
-}
-
-/* =========================================
-   Soft noise texture
-========================================= */
-
-body {
-  position: relative;
-}
-
-body::marker {
-  display: none;
-}
-
-/* =========================================
-   Responsive typography
-========================================= */
 
 @media (max-width: 768px) {
-  body::before {
-    width: 280px;
-    height: 280px;
-    left: -120px;
-  }
-
-  body::after {
-    width: 260px;
-    height: 260px;
-    right: -100px;
+  html {
+    scroll-padding-top: 80px;
   }
 }
-
-/* =========================================
-   Reduced motion
-========================================= */
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  body::before,
-  body::after {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
