@@ -151,9 +151,35 @@ function driveEmbed(v: string) {
   return v.startsWith("http") ? v : `https://drive.google.com/file/d/${v}/preview`;
 }
 
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
+    const io = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12 },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  });
+}
+
+const Eyebrow = ({ children }: { children: React.ReactNode }) => (
+  <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em] text-sage">
+    <span className="h-px w-8 bg-sage/60" />
+    {children}
+  </p>
+);
+
 export default function App() {
   const [filter, setFilter] = useState<"All" | Kind>("All");
   const [open, setOpen] = useState<Project | null>(null);
+  useReveal();
 
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && setOpen(null);
@@ -164,15 +190,17 @@ export default function App() {
   const list = projects.filter((p) => filter === "All" || p.kind === filter);
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/85 backdrop-blur">
+    <div className="relative min-h-screen overflow-x-hidden">
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(55%_45%_at_85%_0%,rgba(201,162,74,0.16),transparent),radial-gradient(40%_40%_at_0%_35%,rgba(15,31,61,0.06),transparent)]" />
+
+      <header className="sticky top-0 z-40 border-b border-sage/10 bg-forest/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <a href="#top" className="font-display text-xl font-bold">
-            Mariam Ibrahim<span className="text-clay">.</span>
+          <a href="#top" className="font-display text-2xl font-semibold tracking-wide text-sage">
+            Mariam<span className="text-gold">.</span>
           </a>
-          <nav className="hidden gap-8 text-sm font-medium md:flex">
+          <nav className="hidden gap-9 text-sm text-sage/75 md:flex">
             {["Work", "About", "Skills", "Journey", "Contact"].map((n) => (
-              <a key={n} href={`#${n.toLowerCase()}`} className="hover:text-clay">
+              <a key={n} href={`#${n.toLowerCase()}`} className="transition hover:text-gold">
                 {n}
               </a>
             ))}
@@ -181,7 +209,7 @@ export default function App() {
             href={DRIVE_FOLDER}
             target="_blank"
             rel="noreferrer"
-            className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-paper transition hover:bg-clay"
+            className="rounded-full border border-sage/30 px-4 py-2 text-sm text-sage transition hover:bg-sage hover:text-forest"
           >
             Videos & files
           </a>
@@ -190,48 +218,66 @@ export default function App() {
 
       <main id="top">
         {/* HERO */}
-        <section className="mx-auto max-w-6xl px-5 pb-16 pt-16 md:pt-28">
-          <p className="rise font-mono text-xs uppercase tracking-[0.25em] text-clay">
-            Frontend & full-stack developer · AI student
-          </p>
-          <h1 className="rise mt-6 max-w-4xl font-display text-5xl font-bold leading-[1.02] tracking-tight [animation-delay:.08s] md:text-8xl">
-            I design and build web products people{" "}
-            <em className="font-medium text-clay">enjoy using.</em>
-          </h1>
-          <p className="rise mt-8 max-w-2xl text-lg leading-8 text-ink/70 [animation-delay:.16s]">
-            I'm Mariam, an AI student at Delta University. I build complete
-            products, from the interface to the API and database, including
-            bilingual English / Arabic experiences.
-          </p>
-          <div className="rise mt-10 flex flex-wrap gap-3 [animation-delay:.24s]">
-            <a href="#work" className="inline-flex items-center gap-2 rounded-full bg-clay px-6 py-3.5 font-semibold text-white transition hover:bg-ink">
-              See selected work <ArrowUpRight size={18} />
-            </a>
-            <a href="/Mariam-Ibrahim-CV.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-6 py-3.5 font-semibold transition hover:border-ink hover:bg-ink hover:text-paper">
-              <Download size={17} /> CV
-            </a>
+        <section className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-14 md:grid-cols-[1.15fr_0.85fr] md:pt-24">
+          <div className="order-2 md:order-1">
+            <p className="rise flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.3em] text-moss-light">
+              <span className="h-px w-8 bg-moss-light/60" /> Frontend & full-stack developer
+            </p>
+            <h1 className="rise mt-6 font-display text-5xl font-medium leading-[1.02] text-sage [animation-delay:.1s] md:text-7xl">
+              Mariam
+              <br />
+              <span className="italic text-gold">Ibrahim</span>
+            </h1>
+            <p className="rise mt-7 max-w-xl text-lg leading-8 text-sage/75 [animation-delay:.2s]">
+              AI student at Delta University. I design and build complete web products, from the
+              interface to the API and database, including bilingual English / Arabic experiences.
+            </p>
+            <div className="rise mt-10 flex flex-wrap gap-3 [animation-delay:.3s]">
+              <a href="#work" className="inline-flex items-center gap-2 rounded-full bg-sage px-7 py-3.5 font-semibold text-forest transition hover:bg-gold hover:text-sage">
+                View my work <ArrowUpRight size={18} />
+              </a>
+              <a href="/Mariam-Ibrahim-CV.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-sage/30 px-7 py-3.5 font-semibold text-sage transition hover:border-sage hover:bg-sage/10">
+                <Download size={17} /> Download CV
+              </a>
+            </div>
+            <dl className="rise mt-14 grid max-w-md grid-cols-3 gap-6 border-t border-sage/15 pt-7 [animation-delay:.4s]">
+              {[
+                [String(projects.length), "Projects"],
+                ["EN · AR", "Bilingual"],
+                ["AI", "Major"],
+              ].map(([a, b]) => (
+                <div key={b}>
+                  <dt className="font-display text-3xl text-sage">{a}</dt>
+                  <dd className="mt-1 text-xs uppercase tracking-widest text-sage/55">{b}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
-          <dl className="mt-16 grid max-w-2xl grid-cols-3 gap-6 border-t border-ink/15 pt-8">
-            {[
-              [String(projects.length), "Projects"],
-              ["2", "Languages (EN / AR)"],
-              ["AI", "Major"],
-            ].map(([a, b]) => (
-              <div key={b}>
-                <dt className="font-display text-4xl font-bold">{a}</dt>
-                <dd className="mt-1 text-sm text-ink/60">{b}</dd>
-              </div>
-            ))}
-          </dl>
+
+          <div className="rise order-1 relative mx-auto w-[78%] max-w-sm [animation-delay:.15s] md:order-2 md:w-full md:max-w-md">
+            <div className="absolute -inset-6 rounded-t-full bg-moss/40 blur-3xl" />
+            <div className="float absolute -left-6 top-10 z-10 hidden rounded-2xl border border-sage/20 bg-forest/90 px-4 py-3 text-sm text-sage shadow-xl backdrop-blur md:block">
+              <span className="font-mono text-[10px] uppercase tracking-widest text-moss-light">Now</span>
+              <br />
+              Building full-stack apps
+            </div>
+            <div className="relative overflow-hidden rounded-t-[999px] rounded-b-[2rem] border border-sage/20 bg-pine p-2 shadow-2xl shadow-sage/15">
+              <img
+                src={shots.photo}
+                alt="Mariam Ibrahim"
+                className="aspect-[3/4] w-full rounded-t-[999px] rounded-b-[1.5rem] object-cover object-top"
+              />
+            </div>
+          </div>
         </section>
 
         {/* MARQUEE */}
-        <div className="overflow-hidden border-y border-ink/10 bg-ink py-4 text-paper">
-          <div className="marquee flex w-max gap-10 whitespace-nowrap font-mono text-sm uppercase tracking-widest">
+        <div className="overflow-hidden border-y border-sage/10 bg-sage py-4 text-forest/80">
+          <div className="marquee flex w-max gap-10 whitespace-nowrap font-mono text-xs uppercase tracking-[0.3em]">
             {Array.from({ length: 2 }).flatMap((_, i) =>
               ["React", "TypeScript", "Node.js", "Express", "Prisma", "PostgreSQL", "Tailwind", "Python", "PyTorch", "Stripe"].map((t) => (
                 <span key={`${i}-${t}`} className="flex gap-10">
-                  {t} <span className="text-clay">✦</span>
+                  {t} <span className="text-gold">◆</span>
                 </span>
               )),
             )}
@@ -239,19 +285,19 @@ export default function App() {
         </div>
 
         {/* WORK */}
-        <section id="work" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-24">
-          <div className="flex flex-wrap items-end justify-between gap-6">
+        <section id="work" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-28">
+          <div data-reveal className="reveal flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.25em] text-clay">Selected work</p>
-              <h2 className="mt-3 font-display text-4xl font-bold md:text-6xl">Projects</h2>
+              <Eyebrow>Selected work</Eyebrow>
+              <h2 className="mt-4 font-display text-5xl text-sage md:text-6xl">Projects</h2>
             </div>
             <div className="flex flex-wrap gap-2">
               {filters.map((f) => (
                 <button
                   key={f}
                   onClick={() => setFilter(f)}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                    filter === f ? "border-ink bg-ink text-paper" : "border-ink/20 hover:border-ink"
+                  className={`rounded-full border px-4 py-2 text-sm transition ${
+                    filter === f ? "border-sage bg-sage text-forest" : "border-sage/25 text-sage/80 hover:border-sage"
                   }`}
                 >
                   {f}
@@ -260,72 +306,79 @@ export default function App() {
             </div>
           </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
-            {list.map((p, i) => (
-              <article
-                key={p.title}
-                className={`group flex flex-col overflow-hidden rounded-3xl border border-ink/10 bg-white transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-ink/10 ${
-                  i === 0 && filter === "All" ? "md:col-span-2" : ""
-                }`}
-              >
-                <div className={`relative overflow-hidden bg-ink/5 ${i === 0 && filter === "All" ? "aspect-[16/8]" : "aspect-[16/10]"}`}>
-                  <img src={p.image} alt={`${p.title} screenshot`} loading="lazy" className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.03]" />
-                  <span className="absolute left-4 top-4 rounded-full bg-paper/95 px-3 py-1 font-mono text-xs">{p.kind}</span>
-                </div>
-                <div className="flex flex-1 flex-col p-7">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h3 className="font-display text-3xl font-bold">{p.title}</h3>
-                    <span className="font-mono text-xs text-ink/50">{p.year}</span>
+          <div className="mt-14 grid gap-8 md:grid-cols-2">
+            {list.map((p, i) => {
+              const big = i === 0 && filter === "All";
+              return (
+                <article
+                  key={p.title}
+                  data-reveal
+                  className={`reveal group flex flex-col overflow-hidden rounded-[1.75rem] border border-sage/15 bg-pine/70 transition duration-500 hover:-translate-y-1.5 hover:border-sage/40 hover:shadow-2xl hover:shadow-sage/15 ${
+                    big ? "md:col-span-2 md:grid md:grid-cols-[1.35fr_1fr]" : ""
+                  }`}
+                >
+                  <div className={`relative overflow-hidden bg-forest ${big ? "min-h-[320px]" : "aspect-[16/10]"}`}>
+                    <img src={p.image} alt={`${p.title} screenshot`} loading="lazy" className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.04]" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-sage/25 to-transparent" />
+                    <span className="absolute left-4 top-4 rounded-full border border-sage/30 bg-forest/80 px-3 py-1 font-mono text-[11px] text-sage backdrop-blur">{p.kind}</span>
                   </div>
-                  <p className="mt-1 text-sm font-medium text-clay">{p.tag}</p>
-                  <p className="mt-4 leading-7 text-ink/70">{p.description}</p>
-                  <ul className="mt-5 flex flex-wrap gap-2">
-                    {p.stack.map((s) => (
-                      <li key={s} className="rounded-full bg-paper px-3 py-1 text-xs font-medium">{s}</li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto flex flex-wrap gap-4 pt-7 text-sm font-semibold">
-                    {p.live && (
-                      <a href={p.live} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-clay">
-                        Live demo <ArrowUpRight size={16} />
-                      </a>
-                    )}
-                    {p.video && (
-                      <button onClick={() => setOpen(p)} className="inline-flex items-center gap-1 hover:text-clay">
-                        <Play size={15} /> Watch video
-                      </button>
-                    )}
-                    {p.code && (
-                      <a href={p.code} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-clay">
-                        <Github size={16} /> Code
-                      </a>
-                    )}
+                  <div className="flex flex-1 flex-col p-7 md:p-9">
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3 className="font-display text-3xl text-sage md:text-4xl">{p.title}</h3>
+                      <span className="font-mono text-xs text-sage/50">{p.year}</span>
+                    </div>
+                    <p className="mt-1 text-sm text-moss-light">{p.tag}</p>
+                    <p className="mt-4 leading-7 text-sage/75">{p.description}</p>
+                    <ul className="mt-5 flex flex-wrap gap-2">
+                      {p.stack.map((s) => (
+                        <li key={s} className="rounded-full border border-sage/15 bg-forest px-3 py-1 text-xs text-sage/80">{s}</li>
+                      ))}
+                    </ul>
+                    <div className="mt-auto flex flex-wrap gap-5 pt-7 text-sm font-semibold text-sage">
+                      {p.live && (
+                        <a href={p.live} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 transition hover:text-gold">
+                          Live demo <ArrowUpRight size={16} />
+                        </a>
+                      )}
+                      {p.video && (
+                        <button onClick={() => setOpen(p)} className="inline-flex items-center gap-1 transition hover:text-gold">
+                          <Play size={15} /> Watch video
+                        </button>
+                      )}
+                      {p.code && (
+                        <a href={p.code} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 transition hover:text-gold">
+                          <Github size={16} /> Code
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
 
-          <a href={DRIVE_FOLDER} target="_blank" rel="noreferrer" className="mt-10 flex items-center justify-between rounded-3xl bg-clay p-7 text-white transition hover:bg-ink">
-            <span className="flex items-center gap-4">
+          <a data-reveal href={DRIVE_FOLDER} target="_blank" rel="noreferrer" className="reveal mt-10 flex items-center justify-between gap-4 rounded-[1.75rem] border border-sage/20 bg-gradient-to-r from-white to-moss/70 p-7 transition hover:border-sage/50">
+            <span className="flex items-center gap-4 text-sage">
               <FolderOpen size={28} />
               <span>
-                <span className="block font-display text-2xl font-bold">Project videos, screenshots and CV</span>
-                <span className="text-sm text-white/80">Everything organized in one Google Drive folder, including full walkthroughs.</span>
+                <span className="block font-display text-2xl text-sage">Project videos, screenshots and CV</span>
+                <span className="text-sm text-sage/70">Everything organized in one Google Drive folder, including full walkthroughs.</span>
               </span>
             </span>
-            <ArrowUpRight />
+            <ArrowUpRight className="shrink-0 text-sage" />
           </a>
         </section>
 
         {/* ABOUT */}
-        <section id="about" className="scroll-mt-16 bg-white py-24">
-          <div className="mx-auto grid max-w-6xl gap-12 px-5 md:grid-cols-[1fr_1.4fr]">
+        <section id="about" className="scroll-mt-16 border-y border-sage/10 bg-white py-28">
+          <div data-reveal className="reveal mx-auto grid max-w-6xl gap-12 px-5 md:grid-cols-[1fr_1.4fr]">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.25em] text-clay">About</p>
-              <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl">Developer with an AI mindset.</h2>
+              <Eyebrow>About</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl leading-tight text-sage md:text-5xl">
+                Developer with an <span className="italic">AI mindset.</span>
+              </h2>
             </div>
-            <div className="space-y-5 text-lg leading-8 text-ink/75">
+            <div className="space-y-5 text-lg leading-8 text-sage/75">
               <p>
                 I'm a Computer Science & AI student who likes taking an idea all the way to a working,
                 polished product. I build the interface, the API and the database myself.
@@ -340,30 +393,35 @@ export default function App() {
         </section>
 
         {/* SKILLS */}
-        <section id="skills" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-24">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-clay">Skills</p>
-          <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl">What I work with</h2>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-ink/10 bg-ink/10 md:grid-cols-2">
-            {skills.map(([t, d]) => (
-              <div key={t} className="bg-paper p-8">
-                <h3 className="font-display text-2xl font-bold">{t}</h3>
-                <p className="mt-3 leading-7 text-ink/70">{d}</p>
+        <section id="skills" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-28">
+          <div data-reveal className="reveal">
+            <Eyebrow>Skills</Eyebrow>
+            <h2 className="mt-4 font-display text-4xl text-sage md:text-5xl">What I work with</h2>
+          </div>
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            {skills.map(([t, d], i) => (
+              <div key={t} data-reveal style={{ transitionDelay: `${i * 80}ms` }} className="reveal rounded-[1.5rem] border border-sage/15 bg-pine/60 p-8 transition hover:border-sage/40">
+                <span className="font-mono text-xs text-moss-light">0{i + 1}</span>
+                <h3 className="mt-2 font-display text-3xl text-sage">{t}</h3>
+                <p className="mt-3 leading-7 text-sage/70">{d}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* JOURNEY */}
-        <section id="journey" className="scroll-mt-16 bg-ink py-24 text-paper">
+        <section id="journey" className="scroll-mt-16 border-y border-sage/10 bg-white py-28">
           <div className="mx-auto max-w-6xl px-5">
-            <p className="font-mono text-xs uppercase tracking-[0.25em] text-clay">Journey</p>
-            <h2 className="mt-3 font-display text-4xl font-bold md:text-5xl">Training & education</h2>
-            <ul className="mt-12 divide-y divide-paper/15 border-y border-paper/15">
+            <div data-reveal className="reveal">
+              <Eyebrow>Journey</Eyebrow>
+              <h2 className="mt-4 font-display text-4xl text-sage md:text-5xl">Training & education</h2>
+            </div>
+            <ul className="mt-12 divide-y divide-sage/15 border-y border-sage/15">
               {journey.map(([o, t, k]) => (
-                <li key={o} className="grid gap-2 py-6 md:grid-cols-[1fr_2fr_auto] md:items-center">
-                  <span className="font-display text-2xl font-bold">{o}</span>
-                  <span className="text-paper/75">{t}</span>
-                  <span className="font-mono text-xs uppercase tracking-widest text-clay">{k}</span>
+                <li key={o} data-reveal className="reveal grid gap-2 py-6 md:grid-cols-[1fr_2fr_auto] md:items-center">
+                  <span className="font-display text-2xl text-sage">{o}</span>
+                  <span className="text-sage/70">{t}</span>
+                  <span className="font-mono text-[11px] uppercase tracking-widest text-moss-light">{k}</span>
                 </li>
               ))}
             </ul>
@@ -371,28 +429,30 @@ export default function App() {
         </section>
 
         {/* CONTACT */}
-        <section id="contact" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-28 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-clay">Contact</p>
-          <h2 className="mx-auto mt-4 max-w-3xl font-display text-5xl font-bold leading-tight md:text-7xl">
-            Have a project? <em className="font-medium text-clay">Let's build it.</em>
-          </h2>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 font-semibold text-paper transition hover:bg-clay"><Mail size={18} /> {EMAIL}</a>
-            <a href={LINKEDIN} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-6 py-3.5 font-semibold transition hover:bg-ink hover:text-paper"><Linkedin size={18} /> LinkedIn</a>
-            <a href={GH} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-6 py-3.5 font-semibold transition hover:bg-ink hover:text-paper"><Github size={18} /> GitHub</a>
+        <section id="contact" className="mx-auto max-w-6xl scroll-mt-16 px-5 py-32 text-center">
+          <div data-reveal className="reveal">
+            <div className="flex justify-center"><Eyebrow>Contact</Eyebrow></div>
+            <h2 className="mx-auto mt-5 max-w-3xl font-display text-5xl leading-tight text-sage md:text-7xl">
+              Have a project? <span className="italic text-sage">Let's build it.</span>
+            </h2>
+            <div className="mt-10 flex flex-wrap justify-center gap-3">
+              <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 rounded-full bg-sage px-6 py-3.5 font-semibold text-forest transition hover:bg-gold hover:text-sage"><Mail size={18} /> {EMAIL}</a>
+              <a href={LINKEDIN} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-sage/30 px-6 py-3.5 font-semibold text-sage transition hover:bg-sage/10"><Linkedin size={18} /> LinkedIn</a>
+              <a href={GH} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-sage/30 px-6 py-3.5 font-semibold text-sage transition hover:bg-sage/10"><Github size={18} /> GitHub</a>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-ink/10 py-8 text-center text-sm text-ink/55">
+      <footer className="border-t border-sage/10 py-8 text-center text-sm text-sage/50">
         © {new Date().getFullYear()} Mariam Ibrahim
       </footer>
 
       {open?.video && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-ink/80 p-4" onClick={() => setOpen(null)} role="dialog" aria-modal="true">
-          <div className="w-full max-w-4xl overflow-hidden rounded-2xl bg-ink" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-3 text-paper">
-              <span className="font-display text-lg font-bold">{open.title}</span>
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4" onClick={() => setOpen(null)} role="dialog" aria-modal="true">
+          <div className="w-full max-w-4xl overflow-hidden rounded-2xl border border-sage/20 bg-forest" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-3 text-sage">
+              <span className="font-display text-xl">{open.title}</span>
               <button onClick={() => setOpen(null)} aria-label="Close"><X /></button>
             </div>
             <div className="aspect-video">
