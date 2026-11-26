@@ -48,7 +48,7 @@ const projects: Project[] = [
     stack: ["React", "TypeScript", "Vite", "RTL / i18n"],
     image: shots.estora,
     live: "https://estora-real-estate-alpha.vercel.app",
-    video: "1aVkiCAM9iikJB4cMyXDZNbajEg9nDBmU",
+    video: "1RKPRcawQrclsWbnca7h879NLAm95rGUs",
   },
   {
     title: "VANTOR",
